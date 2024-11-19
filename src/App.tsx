@@ -63,7 +63,7 @@ const SetTimer = (props: { id: string }) => {
         <button id={`${props.id}-increment`}>
           <FaArrowUp />
         </button>
-        <h1 id={`${props.id}-length`} className="font-normal">{`05:00`}</h1>
+        <h1 id={`${props.id}-length`} className="font-normal">{`5`}</h1>
         <button id={`${props.id}-decrement`}>
           <FaArrowDown />
         </button>
