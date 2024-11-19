@@ -52,6 +52,7 @@ const SetTimer = (props: {
   id: string;
   onClickIncrement: () => void;
   onClickDecrement: () => void;
+  displayTime: number;
 }) => {
   let input = props.id;
   const regex = /[a-z]/;
@@ -74,7 +75,10 @@ const SetTimer = (props: {
         <button id={`${props.id}-increment`} onClick={props.onClickIncrement}>
           <FaArrowUp />
         </button>
-        <h1 id={`${props.id}-length`} className="font-normal">{`5`}</h1>
+        {/* display time */}
+        <h1 id={`${props.id}-length`} className="font-normal">
+          {props.displayTime}
+        </h1>
         <button id={`${props.id}-decrement`} onClick={props.onClickDecrement}>
           <FaArrowDown />
         </button>
@@ -86,6 +90,8 @@ const SetTimer = (props: {
 const App = () => {
   const [playpause, setPlayPause] = useState(false);
   const [options, setOptions] = useState(false);
+  const [breakTime, setBreakTime] = useState(5);
+  const [sessionTime, setSessionTime] = useState(25);
 
   const playPause = () => {
     console.log("play-pause");
@@ -93,10 +99,20 @@ const App = () => {
 
   const reset = () => {
     console.log("reset");
+    setBreakTime(5);
+    setSessionTime(25);
   };
 
   const settings = () => {
     console.log("settings");
+  };
+
+  const setBreakTimer = () => {
+    console.log("break");
+  };
+
+  const setSessionTimer = () => {
+    console.log("session");
   };
 
   return (
@@ -106,14 +122,26 @@ const App = () => {
         id="pomodoro-assembly"
         className="relative flex h-screen select-none flex-col place-content-center items-center justify-center gap-12 overflow-x-hidden p-9 text-center text-xl text-neutral-50 sm:flex-col md:flex-row"
       >
-        <SetTimer id="break" />
+        {/* set break timer */}
+        <SetTimer
+          id="break"
+          displayTime={breakTime}
+          onClickDecrement={setBreakTimer}
+          onClickIncrement={setBreakTimer}
+        />
         <MainTimer
           activeTimer={`Session`}
           onClickPlayPause={playPause}
           onClickReset={reset}
           onClickSettings={settings}
         />
-        <SetTimer id="session" />
+        {/* set session timer */}
+        <SetTimer
+          id="session"
+          displayTime={sessionTime}
+          onClickDecrement={setSessionTimer}
+          onClickIncrement={setSessionTimer}
+        />
       </div>
     </>
   );
