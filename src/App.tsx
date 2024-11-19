@@ -48,13 +48,19 @@ const MainTimer = (props: {
 };
 
 const SetTimer = (props: { id: string }) => {
+  let input = props.id;
+  const regex = /[a-z]/;
+  let toPascalCase = input.replace(regex, (x) => {
+    return x.toUpperCase();
+  });
+
   return (
     <div
       id={`set-${props.id}-timer`}
       className={`flex flex-col gap-4 md:w-[200px]`}
     >
       <h1 id={`${props.id}-label`} className="font-bold">
-        {props.id}
+        {toPascalCase}
       </h1>
       <div
         id={`${props.id}-controls`}
@@ -91,13 +97,13 @@ const App = () => {
         id="pomodoro-assembly"
         className="relative flex h-screen select-none flex-col place-content-center items-center justify-center gap-12 overflow-x-hidden p-9 text-center text-xl text-neutral-50 sm:flex-col md:flex-row"
       >
-        <SetTimer id="Break" />
+        <SetTimer id="break" />
         <MainTimer
           activeTimer={`Session`}
           onClickPlayPause={playPause}
           onClickSettings={settings}
         />
-        <SetTimer id="Session" />
+        <SetTimer id="session" />
       </div>
     </>
   );
