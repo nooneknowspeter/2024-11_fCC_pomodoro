@@ -10,13 +10,15 @@ const Background = () => {
   );
 };
 
-const MainTimer = () => {
+const MainTimer = (props: { activeTimer: string }) => {
   return (
     <div
       id="main-timer"
-      className="absolute bottom-0 left-0 right-0 top-0 mx-auto flex origin-center flex-col place-content-center items-center justify-center gap-4 lg:w-[200px]"
+      className={`flex flex-col place-content-center items-center justify-center gap-4 md:w-[200px]`}
     >
-      <h1 id="timer-label" className="font-bold">{`Session`}</h1>
+      <h1 id="timer-label" className="font-bold">
+        {props.activeTimer}
+      </h1>
       <h1 id="timer-left" className="font-normal">{`25:00`}</h1>
       <div
         id="controls"
@@ -28,32 +30,28 @@ const MainTimer = () => {
       </div>
       <div
         id="progress-bar"
-        className="h-2 w-full rounded-sm bg-neutral-50"
+        className="h-2 w-80 rounded-sm bg-neutral-50 sm:w-80 md:w-full"
       ></div>
     </div>
   );
 };
 
-const SetTimer = () => {
+const SetTimer = (props: { id: string }) => {
   return (
     <div
-      id={`set-${`NameOfTimer`}-timer`}
-      className="flex flex-col gap-4 lg:w-[200px]"
+      id={`set-${props.id}-timer`}
+      className={`flex flex-col gap-4 md:w-[200px]`}
     >
-      <h1
-        id={`${`NameOfTimer`}-label`}
-        className="font-bold"
-      >{`NameOfTimer`}</h1>
+      <h1 id={`${props.id}-label`} className="font-bold">
+        {props.id}
+      </h1>
       <div
-        id={`${`NameOfTimer`}-controls`}
+        id={`${props.id}-controls`}
         className="flex flex-row place-content-center content-center gap-10 text-center"
       >
-        <FaArrowUp id={`${`NameOfTimer`}-increment`} />
-        <h1
-          id={`${`NameOfTimer`}-length`}
-          className="font-normal"
-        >{`05:00`}</h1>
-        <FaArrowDown id={`${`NameOfTimer`}-decrement`} />
+        <FaArrowUp id={`${props.id}-increment`} />
+        <h1 id={`${props.id}-length`} className="font-normal">{`05:00`}</h1>
+        <FaArrowDown id={`${props.id}-decrement`} />
       </div>
     </div>
   );
@@ -65,14 +63,11 @@ const App = () => {
       <Background />
       <div
         id="pomodoro-assembly"
-        className="relative flex h-screen origin-center select-none flex-col place-content-center items-center justify-center text-center text-xl text-neutral-50"
+        className="relative flex h-screen select-none flex-col place-content-center items-center justify-center gap-12 overflow-x-hidden p-9 text-center text-xl text-neutral-50 sm:flex-col md:flex-row"
       >
-        <MainTimer />
-
-        <div id="set-timers" className="flex flex-row gap-96">
-          <SetTimer />
-          <SetTimer />
-        </div>
+        <SetTimer id="Break" />
+        <MainTimer activeTimer="Session" />
+        <SetTimer id="Session" />
       </div>
     </>
   );
