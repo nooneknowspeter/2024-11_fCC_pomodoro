@@ -50,8 +50,8 @@ const MainTimer = (props: {
 
 const SetTimer = (props: {
   id: string;
-  onClickIncrement: () => void;
-  onClickDecrement: () => void;
+  onClickIncrement: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClickDecrement: (event: React.MouseEvent<HTMLButtonElement>) => void;
   displayTime: number;
 }) => {
   let input = props.id;
@@ -107,12 +107,14 @@ const App = () => {
     console.log("settings");
   };
 
-  const setBreakTimer = () => {
+  const setBreakTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
     console.log("break");
+    console.log(e.currentTarget.id);
   };
 
-  const setSessionTimer = () => {
+  const setSessionTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
     console.log("session");
+    console.log(e.currentTarget.id);
   };
 
   return (
