@@ -13,8 +13,9 @@ const Background = () => {
 
 const MainTimer = (props: {
   activeTimer: string;
-  onClickSettings: () => void;
   onClickPlayPause: () => void;
+  onClickReset: () => void;
+  onClickSettings: () => void;
 }) => {
   return (
     <div
@@ -24,7 +25,7 @@ const MainTimer = (props: {
       <h1 id="timer-label" className="font-bold">
         {props.activeTimer}
       </h1>
-      <h1 id="timer-left" className="font-normal">{`25:00`}</h1>
+      <h1 id="time-left" className="font-normal">{`25:00`}</h1>
       <div
         id="controls"
         className="flex flex-row place-content-center content-center gap-10"
@@ -32,7 +33,7 @@ const MainTimer = (props: {
         <button id="start_stop" onClick={props.onClickPlayPause}>
           <FaPause />
         </button>
-        <button id="reset">
+        <button id="reset" onClick={props.onClickReset}>
           <FaUndoAlt />
         </button>
         <button id="settings" onClick={props.onClickSettings}>
@@ -47,7 +48,11 @@ const MainTimer = (props: {
   );
 };
 
-const SetTimer = (props: { id: string }) => {
+const SetTimer = (props: {
+  id: string;
+  onClickIncrement: () => void;
+  onClickDecrement: () => void;
+}) => {
   let input = props.id;
   const regex = /[a-z]/;
   let toPascalCase = input.replace(regex, (x) => {
@@ -66,11 +71,11 @@ const SetTimer = (props: { id: string }) => {
         id={`${props.id}-controls`}
         className="flex flex-row place-content-center content-center gap-10 text-center"
       >
-        <button id={`${props.id}-increment`}>
+        <button id={`${props.id}-increment`} onClick={props.onClickIncrement}>
           <FaArrowUp />
         </button>
         <h1 id={`${props.id}-length`} className="font-normal">{`5`}</h1>
-        <button id={`${props.id}-decrement`}>
+        <button id={`${props.id}-decrement`} onClick={props.onClickDecrement}>
           <FaArrowDown />
         </button>
       </div>
@@ -84,6 +89,10 @@ const App = () => {
 
   const playPause = () => {
     console.log("play-pause");
+  };
+
+  const reset = () => {
+    console.log("reset");
   };
 
   const settings = () => {
@@ -101,6 +110,7 @@ const App = () => {
         <MainTimer
           activeTimer={`Session`}
           onClickPlayPause={playPause}
+          onClickReset={reset}
           onClickSettings={settings}
         />
         <SetTimer id="session" />
