@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FaArrowDown, FaArrowUp, FaPause, FaUndoAlt } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 
@@ -10,7 +11,11 @@ const Background = () => {
   );
 };
 
-const MainTimer = (props: { activeTimer: string }) => {
+const MainTimer = (props: {
+  activeTimer: string;
+  onClickSettings: () => void;
+  onClickPlayPause: () => void;
+}) => {
   return (
     <div
       id="main-timer"
@@ -24,9 +29,15 @@ const MainTimer = (props: { activeTimer: string }) => {
         id="controls"
         className="flex flex-row place-content-center content-center gap-10"
       >
-        <FaPause />
-        <FaUndoAlt />
-        <IoSettingsSharp />
+        <button id="start_stop" onClick={props.onClickPlayPause}>
+          <FaPause />
+        </button>
+        <button id="reset">
+          <FaUndoAlt />
+        </button>
+        <button id="settings" onClick={props.onClickSettings}>
+          <IoSettingsSharp />
+        </button>
       </div>
       <div
         id="progress-bar"
@@ -49,15 +60,30 @@ const SetTimer = (props: { id: string }) => {
         id={`${props.id}-controls`}
         className="flex flex-row place-content-center content-center gap-10 text-center"
       >
-        <FaArrowUp id={`${props.id}-increment`} />
+        <button id={`${props.id}-increment`}>
+          <FaArrowUp />
+        </button>
         <h1 id={`${props.id}-length`} className="font-normal">{`05:00`}</h1>
-        <FaArrowDown id={`${props.id}-decrement`} />
+        <button id={`${props.id}-decrement`}>
+          <FaArrowDown />
+        </button>
       </div>
     </div>
   );
 };
 
 const App = () => {
+  const [playpause, setPlayPause] = useState(false);
+  const [options, setOptions] = useState(false);
+
+  const playPause = () => {
+    console.log("play-pause");
+  };
+
+  const settings = () => {
+    console.log("settings");
+  };
+
   return (
     <>
       <Background />
@@ -66,7 +92,11 @@ const App = () => {
         className="relative flex h-screen select-none flex-col place-content-center items-center justify-center gap-12 overflow-x-hidden p-9 text-center text-xl text-neutral-50 sm:flex-col md:flex-row"
       >
         <SetTimer id="Break" />
-        <MainTimer activeTimer="Session" />
+        <MainTimer
+          activeTimer={`Session`}
+          onClickPlayPause={playPause}
+          onClickSettings={settings}
+        />
         <SetTimer id="Session" />
       </div>
     </>
