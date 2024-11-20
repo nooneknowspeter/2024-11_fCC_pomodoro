@@ -21,3 +21,7 @@
 - [Vite](https://vite.dev/)
 - [Visual Studio code](https://code.visualstudio.com/)
 - [WSL_Ubuntu](https://learn.microsoft.com/en-us/windows/wsl/)
+
+## Resources
+
+[Countdown Timer in React](https://stackoverflow.com/questions/40885923/countdown-timer-in-react)

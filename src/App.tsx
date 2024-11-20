@@ -220,15 +220,17 @@ const App = () => {
             />
           </>
         ) : (
-          <MainTimer
-            activeTimer={`Session`}
-            onClickStartStop={startStopTimer}
-            onClickReset={reset}
-            onClickSettings={settings}
-            displayTime={`25:00`}
-            icon={isRunning ? <FaPause /> : <FaPlay />}
-            progressBar={isRunning && <ProgressBar />}
-          />
+          <>
+            <MainTimer
+              activeTimer={`Session`}
+              onClickStartStop={startStopTimer}
+              onClickReset={reset}
+              onClickSettings={settings}
+              displayTime={`25:00`}
+              icon={isRunning ? <FaPause /> : <FaPlay />}
+              progressBar={isRunning && <ProgressBar />}
+            />
+          </>
         )}
       </div>
       <AnimatedCursor
