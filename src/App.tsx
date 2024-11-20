@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import AnimatedCursor from "react-animated-cursor";
 import {
   FaArrowDown,
@@ -23,8 +23,9 @@ const MainTimer = (props: {
   onClickStartStop: () => void;
   onClickReset: () => void;
   onClickSettings: () => void;
-  icon: () => void;
-  progressBar: () => void;
+  icon: ReactNode;
+  progressBar: ReactNode;
+  displayTime: string;
 }) => {
   return (
     <div
@@ -34,7 +35,9 @@ const MainTimer = (props: {
       <h1 id="timer-label" className="font-bold">
         {props.activeTimer}
       </h1>
-      <h1 id="time-left" className="font-normal">{`25:00`}</h1>
+      <h1 id="time-left" className="font-normal">
+        {props.displayTime}
+      </h1>
       <div
         id="controls"
         className="flex flex-row place-content-center content-center gap-10"
@@ -204,7 +207,9 @@ const App = () => {
               onClickStartStop={startStopTimer}
               onClickReset={reset}
               onClickSettings={settings}
+              displayTime={`25:00`}
               icon={isRunning ? <FaPause /> : <FaPlay />}
+              progressBar={isRunning && <ProgressBar />}
             />
             {/* set session timer */}
             <SetTimer
@@ -220,6 +225,7 @@ const App = () => {
             onClickStartStop={startStopTimer}
             onClickReset={reset}
             onClickSettings={settings}
+            displayTime={`25:00`}
             icon={isRunning ? <FaPause /> : <FaPlay />}
             progressBar={isRunning && <ProgressBar />}
           />
