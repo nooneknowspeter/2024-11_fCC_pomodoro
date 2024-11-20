@@ -73,6 +73,7 @@ const SetTimer = (props: {
   onClickIncrement: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onClickDecrement: (event: React.MouseEvent<HTMLButtonElement>) => void;
   displayTime: number;
+  order: string;
 }) => {
   let input = props.id;
   const regex = /[a-z]/;
@@ -83,7 +84,7 @@ const SetTimer = (props: {
   return (
     <div
       id={`set-${props.id}-timer`}
-      className={`flex flex-col gap-4 md:w-[200px]`}
+      className={`${props.order} flex flex-col gap-4 md:w-[200px]`}
     >
       <h1 id={`${props.id}-label`} className="font-bold">
         {toPascalCase}
@@ -113,26 +114,28 @@ const App = () => {
   const [breakTime, setBreakTime] = useState(5);
   const [sessionTime, setSessionTime] = useState(25);
 
-  const [minutes, setMinutes] = useState(sessionTime);
-  const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(10);
 
   useEffect(() => {
-    let myInterval = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-      }
-      if (seconds === 0) {
-        if (minutes === 0) {
-          clearInterval(myInterval);
-        } else {
-          setMinutes(minutes - 1);
-          setSeconds(59);
+    if (isRunning) {
+      let myInterval = setInterval(() => {
+        if (seconds > 0) {
+          setSeconds(seconds - 1);
+        } else if (seconds === 0) {
+          if (minutes === 0) {
+            clearInterval(myInterval);
+            console.log("timer run out");
+          } else {
+            setMinutes(minutes - 1);
+            setSeconds(59);
+          }
         }
-      }
-    }, 1000);
-    return () => {
-      clearInterval(myInterval);
-    };
+      }, 1000);
+      return () => {
+        clearInterval(myInterval);
+      };
+    }
   });
 
   const startStopTimer = () => {
@@ -152,6 +155,8 @@ const App = () => {
 
     setBreakTime(5);
     setSessionTime(25);
+    setMinutes(sessionTime);
+    setSeconds(0);
   };
 
   const settings = () => {
@@ -215,7 +220,18 @@ const App = () => {
         id="pomodoro-assembly"
         className="relative flex h-screen select-none flex-col place-content-center items-center justify-center gap-12 overflow-x-hidden p-9 text-center text-xl text-neutral-50 sm:flex-col md:flex-row"
       >
-        {options ? (
+        {/* main timer */}
+
+        <MainTimer
+          activeTimer={`Session`}
+          onClickStartStop={startStopTimer}
+          onClickReset={reset}
+          onClickSettings={settings}
+          displayTime={`${minutes}:${seconds}`}
+          icon={isRunning ? <FaPause /> : <FaPlay />}
+          progressBar={isRunning && <ProgressBar />}
+        />
+        {options && (
           <>
             {/* set break timer */}
             <SetTimer
@@ -223,34 +239,16 @@ const App = () => {
               displayTime={breakTime}
               onClickDecrement={setBreakTimer}
               onClickIncrement={setBreakTimer}
+              order={`order-first`}
             />
-            <MainTimer
-              activeTimer={`Session`}
-              onClickStartStop={startStopTimer}
-              onClickReset={reset}
-              onClickSettings={settings}
-              displayTime={`${minutes} : ${seconds}`}
-              icon={isRunning ? <FaPause /> : <FaPlay />}
-              progressBar={isRunning && <ProgressBar />}
-            />
+
             {/* set session timer */}
             <SetTimer
               id="session"
               displayTime={sessionTime}
               onClickDecrement={setSessionTimer}
               onClickIncrement={setSessionTimer}
-            />
-          </>
-        ) : (
-          <>
-            <MainTimer
-              activeTimer={`Session`}
-              onClickStartStop={startStopTimer}
-              onClickReset={reset}
-              onClickSettings={settings}
-              displayTime={`25:00`}
-              icon={isRunning ? <FaPause /> : <FaPlay />}
-              progressBar={isRunning && <ProgressBar />}
+              order={`order-last`}
             />
           </>
         )}
