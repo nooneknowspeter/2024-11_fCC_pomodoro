@@ -106,6 +106,19 @@ const App = () => {
 
   const settings = () => {
     console.log("settings");
+
+    switch (options) {
+      case true:
+        setOptions(false);
+        break;
+      case false:
+        setOptions(true);
+        break;
+
+      default:
+        break;
+    }
+    console.log(options);
   };
 
   const setBreakTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -152,47 +165,45 @@ const App = () => {
         id="pomodoro-assembly"
         className="relative flex h-screen select-none flex-col place-content-center items-center justify-center gap-12 overflow-x-hidden p-9 text-center text-xl text-neutral-50 sm:flex-col md:flex-row"
       >
-        {/* set break timer */}
-        <SetTimer
-          id="break"
-          displayTime={breakTime}
-          onClickDecrement={setBreakTimer}
-          onClickIncrement={setBreakTimer}
-        />
-        <MainTimer
-          activeTimer={`Session`}
-          onClickStartStop={startStopTimer}
-          onClickReset={reset}
-          onClickSettings={settings}
-        />
-        {/* set session timer */}
-        <SetTimer
-          id="session"
-          displayTime={sessionTime}
-          onClickDecrement={setSessionTimer}
-          onClickIncrement={setSessionTimer}
-        />
+        {options ? (
+          <>
+            {/* set break timer */}
+            <SetTimer
+              id="break"
+              displayTime={breakTime}
+              onClickDecrement={setBreakTimer}
+              onClickIncrement={setBreakTimer}
+            />
+            <MainTimer
+              activeTimer={`Session`}
+              onClickStartStop={startStopTimer}
+              onClickReset={reset}
+              onClickSettings={settings}
+            />
+            {/* set session timer */}
+            <SetTimer
+              id="session"
+              displayTime={sessionTime}
+              onClickDecrement={setSessionTimer}
+              onClickIncrement={setSessionTimer}
+            />
+          </>
+        ) : (
+          <MainTimer
+            activeTimer={`Session`}
+            onClickStartStop={startStopTimer}
+            onClickReset={reset}
+            onClickSettings={settings}
+          />
+        )}
       </div>
       <AnimatedCursor
         innerSize={8}
         outerSize={8}
-        color="193, 11, 111"
+        color="255, 255, 255"
         outerAlpha={0.2}
-        innerScale={0.7}
+        innerScale={0.6}
         outerScale={5}
-        clickables={[
-          "a",
-          'input[type="text"]',
-          'input[type="email"]',
-          'input[type="number"]',
-          'input[type="submit"]',
-          'input[type="image"]',
-          "label[for]",
-          "select",
-          "textarea",
-          "button",
-          ".link",
-        ]}
       />
     </>
   );
