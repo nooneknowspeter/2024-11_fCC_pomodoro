@@ -115,7 +115,7 @@ const App = () => {
   const [sessionTime, setSessionTime] = useState(25);
 
   const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(10);
+  const [seconds, setSeconds] = useState(9);
 
   useEffect(() => {
     if (isRunning) {
@@ -227,7 +227,7 @@ const App = () => {
           onClickStartStop={startStopTimer}
           onClickReset={reset}
           onClickSettings={settings}
-          displayTime={`${minutes}:${seconds}`}
+          displayTime={`${minutes.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false })}:${seconds.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false })}`}
           icon={isRunning ? <FaPause /> : <FaPlay />}
           progressBar={isRunning && <ProgressBar />}
         />
