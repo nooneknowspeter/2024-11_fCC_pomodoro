@@ -13,7 +13,7 @@ const Background = () => {
 
 const MainTimer = (props: {
   activeTimer: string;
-  onClickPlayPause: () => void;
+  onClickStartStop: () => void;
   onClickReset: () => void;
   onClickSettings: () => void;
 }) => {
@@ -30,7 +30,7 @@ const MainTimer = (props: {
         id="controls"
         className="flex flex-row place-content-center content-center gap-10"
       >
-        <button id="start_stop" onClick={props.onClickPlayPause}>
+        <button id="start_stop" onClick={props.onClickStartStop}>
           <FaPause />
         </button>
         <button id="reset" onClick={props.onClickReset}>
@@ -88,13 +88,13 @@ const SetTimer = (props: {
 };
 
 const App = () => {
-  const [playpause, setPlayPause] = useState(false);
+  const [startStop, setStartStop] = useState(false);
   const [options, setOptions] = useState(false);
   const [breakTime, setBreakTime] = useState(5);
   const [sessionTime, setSessionTime] = useState(25);
 
-  const playPause = () => {
-    console.log("play-pause");
+  const startStopTimer = () => {
+    console.log("start-stop");
   };
 
   const reset = () => {
@@ -108,13 +108,40 @@ const App = () => {
   };
 
   const setBreakTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("break");
-    console.log(e.currentTarget.id);
+    const buttonID = e.currentTarget.id;
+
+    switch (buttonID) {
+      case "break-increment":
+        console.log("count increase");
+        breakTime < 60 && setBreakTime(breakTime + 1);
+        break;
+      case "break-decrement":
+        console.log("count decrease");
+        breakTime > 1 && setBreakTime(breakTime - 1);
+
+        break;
+      default:
+        useState(5);
+        break;
+    }
   };
 
   const setSessionTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("session");
-    console.log(e.currentTarget.id);
+    const buttonID = e.currentTarget.id;
+
+    switch (buttonID) {
+      case "session-increment":
+        console.log("count increase");
+        sessionTime < 60 && setSessionTime(sessionTime + 1);
+        break;
+      case "session-decrement":
+        console.log("count decrease");
+        sessionTime > 1 && setSessionTime(sessionTime - 1);
+        break;
+      default:
+        useState(25);
+        break;
+    }
   };
 
   return (
@@ -133,7 +160,7 @@ const App = () => {
         />
         <MainTimer
           activeTimer={`Session`}
-          onClickPlayPause={playPause}
+          onClickStartStop={startStopTimer}
           onClickReset={reset}
           onClickSettings={settings}
         />
