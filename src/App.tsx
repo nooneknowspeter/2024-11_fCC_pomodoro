@@ -1,6 +1,12 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import AnimatedCursor from "react-animated-cursor";
-import { FaArrowDown, FaArrowUp, FaPause, FaUndoAlt } from "react-icons/fa";
+import {
+  FaArrowDown,
+  FaArrowUp,
+  FaPause,
+  FaPlay,
+  FaUndoAlt,
+} from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 
 const Background = () => {
@@ -17,6 +23,8 @@ const MainTimer = (props: {
   onClickStartStop: () => void;
   onClickReset: () => void;
   onClickSettings: () => void;
+  icon: () => void;
+  progressBar: () => void;
 }) => {
   return (
     <div
@@ -32,7 +40,7 @@ const MainTimer = (props: {
         className="flex flex-row place-content-center content-center gap-10"
       >
         <button id="start_stop" onClick={props.onClickStartStop}>
-          <FaPause />
+          {props.icon}
         </button>
         <button id="reset" onClick={props.onClickReset}>
           <FaUndoAlt />
@@ -41,11 +49,19 @@ const MainTimer = (props: {
           <IoSettingsSharp />
         </button>
       </div>
+      {props.progressBar}
+    </div>
+  );
+};
+
+const ProgressBar = () => {
+  return (
+    <>
       <div
         id="progress-bar"
         className="h-2 w-80 rounded-sm bg-neutral-50 sm:w-80 md:w-full"
       ></div>
-    </div>
+    </>
   );
 };
 
@@ -89,17 +105,26 @@ const SetTimer = (props: {
 };
 
 const App = () => {
-  const [startStop, setStartStop] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
   const [options, setOptions] = useState(false);
   const [breakTime, setBreakTime] = useState(5);
   const [sessionTime, setSessionTime] = useState(25);
 
   const startStopTimer = () => {
-    console.log("start-stop");
+    if (isRunning) {
+      console.log("stop");
+
+      setIsRunning(false);
+    } else if (!isRunning) {
+      console.log("start");
+
+      setIsRunning(true);
+    }
   };
 
   const reset = () => {
     console.log("reset");
+
     setBreakTime(5);
     setSessionTime(25);
   };
@@ -179,6 +204,7 @@ const App = () => {
               onClickStartStop={startStopTimer}
               onClickReset={reset}
               onClickSettings={settings}
+              icon={isRunning ? <FaPause /> : <FaPlay />}
             />
             {/* set session timer */}
             <SetTimer
@@ -194,6 +220,8 @@ const App = () => {
             onClickStartStop={startStopTimer}
             onClickReset={reset}
             onClickSettings={settings}
+            icon={isRunning ? <FaPause /> : <FaPlay />}
+            progressBar={isRunning && <ProgressBar />}
           />
         )}
       </div>
