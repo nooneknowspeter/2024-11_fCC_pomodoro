@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import AnimatedCursor from "react-animated-cursor";
 import {
   FaArrowDown,
@@ -113,6 +113,28 @@ const App = () => {
   const [breakTime, setBreakTime] = useState(5);
   const [sessionTime, setSessionTime] = useState(25);
 
+  const [minutes, setMinutes] = useState(sessionTime);
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    let myInterval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(myInterval);
+        } else {
+          setMinutes(minutes - 1);
+          setSeconds(59);
+        }
+      }
+    }, 1000);
+    return () => {
+      clearInterval(myInterval);
+    };
+  });
+
   const startStopTimer = () => {
     if (isRunning) {
       console.log("stop");
@@ -207,7 +229,7 @@ const App = () => {
               onClickStartStop={startStopTimer}
               onClickReset={reset}
               onClickSettings={settings}
-              displayTime={`25:00`}
+              displayTime={`${minutes} : ${seconds}`}
               icon={isRunning ? <FaPause /> : <FaPlay />}
               progressBar={isRunning && <ProgressBar />}
             />
