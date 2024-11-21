@@ -88,7 +88,7 @@ const PomodoroAssembly = () => {
       default:
         break;
     }
-    console.log(options);
+    console.log("options", options);
   };
 
   const setBreakTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
