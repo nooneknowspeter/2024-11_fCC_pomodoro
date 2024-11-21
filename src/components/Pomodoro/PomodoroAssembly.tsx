@@ -19,7 +19,6 @@ const PomodoroAssembly = () => {
 
   useEffect(() => {
     while (isRunning) {
-      setActiveTimer("Session");
       let myInterval = setInterval(() => {
         if (seconds > 0) {
           setSeconds(seconds - 1);
@@ -27,14 +26,20 @@ const PomodoroAssembly = () => {
           if (minutes === 0) {
             clearInterval(myInterval);
             console.log("timer run out");
-            if (activeTimer === "Session") {
-              setActiveTimer("Break");
-              setMinutes(breakTime);
-              setSeconds(0);
-            } else if (activeTimer === "Break") {
-              setActiveTimer("Session");
-              setMinutes(sessionTime);
-              setSeconds(0);
+            switch (activeTimer) {
+              case "Session":
+                setActiveTimer("Break");
+                setMinutes(breakTime);
+                setSeconds(0);
+                break;
+              case "Break":
+                setActiveTimer("Session");
+                setMinutes(sessionTime);
+                setSeconds(0);
+                break;
+
+              default:
+                break;
             }
           } else {
             setMinutes(minutes - 1);
@@ -65,7 +70,8 @@ const PomodoroAssembly = () => {
 
     setBreakTime(5);
     setSessionTime(25);
-    setMinutes(sessionTime);
+    setMinutes(25);
+    setSeconds(0);
   };
 
   const settings = () => {
@@ -91,21 +97,23 @@ const PomodoroAssembly = () => {
     switch (buttonID) {
       case "break-increment":
         console.log("count increase");
-        breakTime < 60 && setBreakTime(breakTime + 1);
-        if (!isRunning) {
-          setMinutes(breakTime);
-          setSeconds(0);
-          return;
-        }
+
+        setActiveTimer("Break");
+
+        !isRunning && breakTime < 60 && setBreakTime(breakTime + 1);
+        !isRunning && breakTime < 60 && setMinutes(breakTime + 1);
+        !isRunning && setSeconds(0);
+
         break;
       case "break-decrement":
         console.log("count decrease");
-        breakTime > 1 && setBreakTime(breakTime - 1);
-        if (!isRunning) {
-          setMinutes(breakTime);
-          setSeconds(0);
-          return;
-        }
+
+        setActiveTimer("Break");
+
+        !isRunning && breakTime > 1 && setBreakTime(breakTime - 1);
+        !isRunning && breakTime > 1 && setMinutes(breakTime - 1);
+        !isRunning && setSeconds(0);
+
         break;
       default:
         useState(5);
@@ -119,29 +127,31 @@ const PomodoroAssembly = () => {
     switch (buttonID) {
       case "session-increment":
         console.log("count increase");
-        sessionTime < 60 && setSessionTime(sessionTime + 1);
-        if (!isRunning) {
-          setMinutes(sessionTime);
-          setSeconds(0);
-          return;
-        }
+
+        setActiveTimer("Session");
+
+        !isRunning && sessionTime < 60 && setSessionTime(sessionTime + 1);
+        !isRunning && sessionTime < 60 && setMinutes(sessionTime + 1);
+        !isRunning && setSeconds(0);
+
         break;
       case "session-decrement":
         console.log("count decrease");
-        sessionTime > 1 && setSessionTime(sessionTime - 1);
-        if (!isRunning) {
-          setMinutes(sessionTime);
-          setSeconds(0);
-          return;
-        }
+
+        setActiveTimer("Session");
+
+        !isRunning && sessionTime > 1 && setSessionTime(sessionTime - 1);
+        !isRunning && sessionTime > 1 && setMinutes(sessionTime - 1);
+        !isRunning && setSeconds(0);
+
         break;
       default:
-        useState(25);
         break;
     }
   };
 
   const setTimersOnKeyboardInput = () => {};
+
   return (
     <>
       <div
@@ -162,6 +172,7 @@ const PomodoroAssembly = () => {
         {options && (
           <>
             {/* set break timer */}
+
             <SetTimer
               id="break"
               displayTime={breakTime}
@@ -170,8 +181,8 @@ const PomodoroAssembly = () => {
               order={`order-first`}
               setTimerOnChange={setTimersOnKeyboardInput}
             />
-
             {/* set session timer */}
+
             <SetTimer
               id="session"
               displayTime={sessionTime}
@@ -183,6 +194,10 @@ const PomodoroAssembly = () => {
           </>
         )}
       </div>
+      <audio
+        id="beep"
+        src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"
+      ></audio>
     </>
   );
 };
