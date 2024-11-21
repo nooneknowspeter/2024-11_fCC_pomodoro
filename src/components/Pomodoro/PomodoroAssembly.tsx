@@ -19,14 +19,25 @@ const PomodoroAssembly = () => {
     "Session",
   );
 
-  const [progress, setProgress] = useState(1);
-
-  let breaTimeInSeconds = breakTime * 60;
-
   useEffect(() => {
+    let breakTimeInSeconds = breakTime * 60;
+    let sessionTimeInSeconds = sessionTime * 60;
+    let totalSeconds = minutes * 60 + seconds;
     while (isRunning) {
       let myInterval = setInterval(() => {
         if (seconds > 0) {
+          console.log(
+            activeTimer == "Session"
+              ? (
+                  (sessionTimeInSeconds - totalSeconds) /
+                  sessionTimeInSeconds
+                ).toFixed(1)
+              : (
+                  (breakTimeInSeconds - totalSeconds) /
+                  breakTimeInSeconds
+                ).toFixed(1),
+          );
+
           setSeconds(seconds - 1);
         } else if (seconds === 0) {
           if (minutes === 0) {
@@ -44,7 +55,6 @@ const PomodoroAssembly = () => {
                 setMinutes(sessionTime);
                 setSeconds(0);
                 break;
-
               default:
                 break;
             }
@@ -178,9 +188,7 @@ const PomodoroAssembly = () => {
           displayTime={`${minutes.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false })}:${seconds.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false })}`}
           icon={isRunning ? <FaPause /> : <FaPlay />}
           progressBar={
-            isRunning && (
-              <ProgressBar progressColor={`bg-neutral-50`} status={progress} />
-            )
+            isRunning && <ProgressBar progressColor={`bg-neutral-50`} />
           }
         />
         {options && (
