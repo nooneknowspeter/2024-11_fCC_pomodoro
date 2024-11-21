@@ -1,4 +1,4 @@
-import React, { MutableRefObject } from "react";
+import React from "react";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
 const SetTimer = (props: {
@@ -7,8 +7,8 @@ const SetTimer = (props: {
   onClickDecrement: (event: React.MouseEvent<HTMLButtonElement>) => void;
   displayTime: number;
   order: string;
-  ref: MutableRefObject<null>;
   opacity: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   let input = props.id;
   const regex = /[a-z]/;
@@ -20,7 +20,6 @@ const SetTimer = (props: {
     <div
       id={`set-${props.id}-timer`}
       className={`${props.order} ${props.opacity} flex flex-col gap-4 transition-all duration-700 md:w-[200px]`}
-      ref={props.ref}
     >
       <h1 id={`${props.id}-label`} className="font-bold">
         {toPascalCase}
@@ -36,6 +35,12 @@ const SetTimer = (props: {
         <h1 id={`${props.id}-length`} className="text-center font-normal">
           {props.displayTime}
         </h1>
+        <input
+          id={`${props.id}-input`}
+          type="number"
+          className="absolute w-12 bg-transparent text-center font-normal [appearance:textfield] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          onChange={props.onChange}
+        />
         <button id={`${props.id}-decrement`} onClick={props.onClickDecrement}>
           <FaArrowDown />
         </button>
