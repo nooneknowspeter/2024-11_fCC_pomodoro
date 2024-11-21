@@ -167,7 +167,11 @@ const PomodoroAssembly = () => {
           onClickSettings={settings}
           displayTime={`${minutes.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false })}:${seconds.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false })}`}
           icon={isRunning ? <FaPause /> : <FaPlay />}
-          progressBar={isRunning && <ProgressBar />}
+          progressBar={
+            isRunning && (
+              <ProgressBar progressColor={`bg-neutral-50`} status={`50`} />
+            )
+          }
         />
         {options && (
           <>
