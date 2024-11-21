@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaPause, FaPlay } from "react-icons/fa";
 import MainTimer from "./MainTimer";
 import ProgressBar from "./ProgressBar";
 import SetTimer from "./SetTimer";
 
 const PomodoroAssembly = () => {
+  const audioRef = useRef<HTMLAudioElement>(new Audio());
+
   const [isRunning, setIsRunning] = useState(false);
   const [options, setOptions] = useState(false);
   const [breakTime, setBreakTime] = useState(5);
@@ -17,6 +19,10 @@ const PomodoroAssembly = () => {
     "Session",
   );
 
+  const [progress, setProgress] = useState(1);
+
+  let breaTimeInSeconds = breakTime * 60;
+
   useEffect(() => {
     while (isRunning) {
       let myInterval = setInterval(() => {
@@ -26,6 +32,7 @@ const PomodoroAssembly = () => {
           if (minutes === 0) {
             clearInterval(myInterval);
             console.log("timer run out");
+            audioRef.current.play();
             switch (activeTimer) {
               case "Session":
                 setActiveTimer("Break");
@@ -72,6 +79,9 @@ const PomodoroAssembly = () => {
     setSessionTime(25);
     setMinutes(25);
     setSeconds(0);
+
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
   };
 
   const settings = () => {
@@ -98,7 +108,7 @@ const PomodoroAssembly = () => {
       case "break-increment":
         console.log("count increase");
 
-        setActiveTimer("Break");
+        !isRunning && setActiveTimer("Break");
 
         !isRunning && breakTime < 60 && setBreakTime(breakTime + 1);
         !isRunning && breakTime < 60 && setMinutes(breakTime + 1);
@@ -108,7 +118,7 @@ const PomodoroAssembly = () => {
       case "break-decrement":
         console.log("count decrease");
 
-        setActiveTimer("Break");
+        !isRunning && setActiveTimer("Break");
 
         !isRunning && breakTime > 1 && setBreakTime(breakTime - 1);
         !isRunning && breakTime > 1 && setMinutes(breakTime - 1);
@@ -169,7 +179,7 @@ const PomodoroAssembly = () => {
           icon={isRunning ? <FaPause /> : <FaPlay />}
           progressBar={
             isRunning && (
-              <ProgressBar progressColor={`bg-neutral-50`} status={`50`} />
+              <ProgressBar progressColor={`bg-neutral-50`} status={progress} />
             )
           }
         />
@@ -200,7 +210,8 @@ const PomodoroAssembly = () => {
       </div>
       <audio
         id="beep"
-        src="https://cdn.freecodecamp.org/testable-projects-fcc/audio/BeepSound.wav"
+        src="/src/assets/dusk-oneshot-ectoplasm.wav"
+        ref={audioRef}
       ></audio>
     </>
   );
