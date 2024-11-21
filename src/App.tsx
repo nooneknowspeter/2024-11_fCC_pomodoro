@@ -114,8 +114,10 @@ const App = () => {
   const [breakTime, setBreakTime] = useState(5);
   const [sessionTime, setSessionTime] = useState(25);
 
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(9);
+  const [minutes, setMinutes] = useState(25);
+  const [seconds, setSeconds] = useState(0);
+
+  const [activeTimer, setActiveTimer] = useState("Session");
 
   useEffect(() => {
     if (isRunning) {
@@ -155,7 +157,7 @@ const App = () => {
 
     setBreakTime(5);
     setSessionTime(25);
-    setMinutes(sessionTime);
+    setMinutes(25);
     setSeconds(0);
   };
 
@@ -183,11 +185,12 @@ const App = () => {
       case "break-increment":
         console.log("count increase");
         breakTime < 60 && setBreakTime(breakTime + 1);
+        setMinutes(breakTime);
         break;
       case "break-decrement":
         console.log("count decrease");
         breakTime > 1 && setBreakTime(breakTime - 1);
-
+        setMinutes(breakTime);
         break;
       default:
         useState(5);
@@ -202,10 +205,20 @@ const App = () => {
       case "session-increment":
         console.log("count increase");
         sessionTime < 60 && setSessionTime(sessionTime + 1);
+        if (!isRunning) {
+          setMinutes(sessionTime);
+          setSeconds(0);
+          return;
+        }
         break;
       case "session-decrement":
         console.log("count decrease");
         sessionTime > 1 && setSessionTime(sessionTime - 1);
+        if (!isRunning) {
+          setMinutes(sessionTime);
+          setSeconds(0);
+          return;
+        }
         break;
       default:
         useState(25);
@@ -223,7 +236,7 @@ const App = () => {
         {/* main timer */}
 
         <MainTimer
-          activeTimer={`Session`}
+          activeTimer={activeTimer}
           onClickStartStop={startStopTimer}
           onClickReset={reset}
           onClickSettings={settings}
