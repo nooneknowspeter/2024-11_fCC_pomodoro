@@ -74,6 +74,7 @@ const SetTimer = (props: {
   onClickDecrement: (event: React.MouseEvent<HTMLButtonElement>) => void;
   displayTime: number;
   order: string;
+  setTimerOnChange: React.ChangeEventHandler<HTMLInputElement>;
 }) => {
   let input = props.id;
   const regex = /[a-z]/;
@@ -97,7 +98,7 @@ const SetTimer = (props: {
           <FaArrowUp />
         </button>
         {/* display time */}
-        <h1 id={`${props.id}-length`} className="font-normal">
+        <h1 id={`${props.id}-length`} className="text-center font-normal">
           {props.displayTime}
         </h1>
         <button id={`${props.id}-decrement`} onClick={props.onClickDecrement}>
@@ -114,13 +115,16 @@ const App = () => {
   const [breakTime, setBreakTime] = useState(5);
   const [sessionTime, setSessionTime] = useState(25);
 
-  const [minutes, setMinutes] = useState(25);
+  const [minutes, setMinutes] = useState(sessionTime);
   const [seconds, setSeconds] = useState(0);
 
-  const [activeTimer, setActiveTimer] = useState("Session");
+  const [activeTimer, setActiveTimer] = useState<"Session" | "Break">(
+    "Session",
+  );
 
   useEffect(() => {
-    if (isRunning) {
+    while (isRunning) {
+      setActiveTimer("Session");
       let myInterval = setInterval(() => {
         if (seconds > 0) {
           setSeconds(seconds - 1);
@@ -128,6 +132,15 @@ const App = () => {
           if (minutes === 0) {
             clearInterval(myInterval);
             console.log("timer run out");
+            if (activeTimer === "Session") {
+              setActiveTimer("Break");
+              setMinutes(breakTime);
+              setSeconds(0);
+            } else if (activeTimer === "Break") {
+              setActiveTimer("Session");
+              setMinutes(sessionTime);
+              setSeconds(0);
+            }
           } else {
             setMinutes(minutes - 1);
             setSeconds(59);
@@ -157,8 +170,7 @@ const App = () => {
 
     setBreakTime(5);
     setSessionTime(25);
-    setMinutes(25);
-    setSeconds(0);
+    setMinutes(sessionTime);
   };
 
   const settings = () => {
@@ -185,12 +197,20 @@ const App = () => {
       case "break-increment":
         console.log("count increase");
         breakTime < 60 && setBreakTime(breakTime + 1);
-        setMinutes(breakTime);
+        if (!isRunning) {
+          setMinutes(breakTime);
+          setSeconds(0);
+          return;
+        }
         break;
       case "break-decrement":
         console.log("count decrease");
         breakTime > 1 && setBreakTime(breakTime - 1);
-        setMinutes(breakTime);
+        if (!isRunning) {
+          setMinutes(breakTime);
+          setSeconds(0);
+          return;
+        }
         break;
       default:
         useState(5);
@@ -226,6 +246,8 @@ const App = () => {
     }
   };
 
+  const setTimersOnKeyboardInput = () => {};
+
   return (
     <>
       <Background />
@@ -253,6 +275,7 @@ const App = () => {
               onClickDecrement={setBreakTimer}
               onClickIncrement={setBreakTimer}
               order={`order-first`}
+              setTimerOnChange={setTimersOnKeyboardInput}
             />
 
             {/* set session timer */}
@@ -262,6 +285,7 @@ const App = () => {
               onClickDecrement={setSessionTimer}
               onClickIncrement={setSessionTimer}
               order={`order-last`}
+              setTimerOnChange={setTimersOnKeyboardInput}
             />
           </>
         )}
