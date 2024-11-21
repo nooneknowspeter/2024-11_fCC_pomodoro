@@ -15,7 +15,6 @@ const PomodoroAssembly = () => {
   const container = useRef(null);
   const setBreakTimerRef = useRef(null);
   const setSessionTimerRef = useRef(null);
-  const { contextSafe } = useGSAP({ scope: container });
 
   const [isRunning, setIsRunning] = useState(false);
   const [options, setOptions] = useState(false);
