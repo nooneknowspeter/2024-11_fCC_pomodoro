@@ -4,8 +4,18 @@ import MainTimer from "./MainTimer";
 import ProgressBar from "./ProgressBar";
 import SetTimer from "./SetTimer";
 
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(useGSAP);
+
 const PomodoroAssembly = () => {
   const audioRef = useRef<HTMLAudioElement>(new Audio());
+
+  const container = useRef(null);
+  const setBreakTimerRef = useRef(null);
+  const setSessionTimerRef = useRef(null);
+  const { contextSafe } = useGSAP({ scope: container });
 
   const [isRunning, setIsRunning] = useState(false);
   const [options, setOptions] = useState(false);
@@ -99,16 +109,20 @@ const PomodoroAssembly = () => {
 
     switch (options) {
       case true:
+        console.log("off");
+
         setOptions(false);
         break;
       case false:
+        console.log("on");
+
         setOptions(true);
+
         break;
 
       default:
         break;
     }
-    console.log("options", options);
   };
 
   const setBreakTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -170,13 +184,12 @@ const PomodoroAssembly = () => {
     }
   };
 
-  const setTimersOnKeyboardInput = () => {};
-
   return (
     <>
       <div
         id="pomodoro-assembly"
         className="relative flex h-screen select-none flex-col place-content-center items-center justify-center gap-12 overflow-x-hidden p-9 text-center text-xl text-neutral-50 sm:flex-col md:flex-row"
+        ref={container}
       >
         {/* main timer */}
 
@@ -188,33 +201,36 @@ const PomodoroAssembly = () => {
           displayTime={`${minutes.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false })}:${seconds.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false })}`}
           icon={isRunning ? <FaPause /> : <FaPlay />}
           progressBar={
-            isRunning && <ProgressBar progressColor={`bg-neutral-50`} />
+            <ProgressBar
+              opacity={isRunning ? "animate-pulse scale-x-100" : " scale-x-0"}
+            />
           }
         />
-        {options && (
-          <>
-            {/* set break timer */}
 
-            <SetTimer
-              id="break"
-              displayTime={breakTime}
-              onClickDecrement={setBreakTimer}
-              onClickIncrement={setBreakTimer}
-              order={`order-first`}
-              setTimerOnChange={setTimersOnKeyboardInput}
-            />
-            {/* set session timer */}
+        <>
+          {/* set break timer */}
 
-            <SetTimer
-              id="session"
-              displayTime={sessionTime}
-              onClickDecrement={setSessionTimer}
-              onClickIncrement={setSessionTimer}
-              order={`order-last`}
-              setTimerOnChange={setTimersOnKeyboardInput}
-            />
-          </>
-        )}
+          <SetTimer
+            id="break"
+            displayTime={breakTime}
+            onClickDecrement={setBreakTimer}
+            onClickIncrement={setBreakTimer}
+            order={`order-first`}
+            ref={setBreakTimerRef}
+            opacity={options ? "opacity-100" : "opacity-0"}
+          />
+          {/* set session timer */}
+
+          <SetTimer
+            id="session"
+            displayTime={sessionTime}
+            onClickDecrement={setSessionTimer}
+            onClickIncrement={setSessionTimer}
+            order={`order-last`}
+            ref={setSessionTimerRef}
+            opacity={options ? "opacity-100" : "opacity-0"}
+          />
+        </>
       </div>
       <audio
         id="beep"

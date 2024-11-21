@@ -1,9 +1,9 @@
-const ProgressBar = (props: { progressColor: string }) => {
+const ProgressBar = (props: { opacity: string }) => {
   return (
     <>
       <div
         id="progress-bar"
-        className={`${props.progressColor} z-0 h-2 w-80 animate-pulse rounded-sm transition-all sm:w-80 md:w-full`}
+        className={`${props.opacity} z-0 h-2 w-80 rounded-sm bg-neutral-50 transition-all duration-1000 sm:w-80 md:w-full`}
       ></div>
     </>
   );

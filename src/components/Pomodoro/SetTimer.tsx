@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MutableRefObject } from "react";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
 const SetTimer = (props: {
@@ -7,7 +7,8 @@ const SetTimer = (props: {
   onClickDecrement: (event: React.MouseEvent<HTMLButtonElement>) => void;
   displayTime: number;
   order: string;
-  setTimerOnChange: React.ChangeEventHandler<HTMLInputElement>;
+  ref: MutableRefObject<null>;
+  opacity: string;
 }) => {
   let input = props.id;
   const regex = /[a-z]/;
@@ -18,7 +19,8 @@ const SetTimer = (props: {
   return (
     <div
       id={`set-${props.id}-timer`}
-      className={`${props.order} flex flex-col gap-4 md:w-[200px]`}
+      className={`${props.order} ${props.opacity} flex flex-col gap-4 transition-all duration-700 md:w-[200px]`}
+      ref={props.ref}
     >
       <h1 id={`${props.id}-label`} className="font-bold">
         {toPascalCase}
