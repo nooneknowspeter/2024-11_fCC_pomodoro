@@ -24,8 +24,6 @@ const PomodoroAssembly = () => {
     "Session",
   );
 
-  const [inputValue, setInputValue] = useState("");
-
   useEffect(() => {
     let breakTimeInSeconds = breakTime * 60;
     let sessionTimeInSeconds = sessionTime * 60;
@@ -129,8 +127,6 @@ const PomodoroAssembly = () => {
       case "break-increment":
         console.log("count increase");
 
-        setInputValue("");
-
         !isRunning && setActiveTimer("Break");
 
         !isRunning && breakTime < 60 && setBreakTime(breakTime + 1);
@@ -140,8 +136,6 @@ const PomodoroAssembly = () => {
         break;
       case "break-decrement":
         console.log("count decrease");
-
-        setInputValue("");
 
         !isRunning && setActiveTimer("Break");
 
@@ -163,8 +157,6 @@ const PomodoroAssembly = () => {
       case "session-increment":
         console.log("count increase");
 
-        setInputValue("");
-
         !isRunning && setActiveTimer("Session");
 
         !isRunning && sessionTime < 60 && setSessionTime(sessionTime + 1);
@@ -174,8 +166,6 @@ const PomodoroAssembly = () => {
         break;
       case "session-decrement":
         console.log("count decrease");
-
-        setInputValue("");
 
         !isRunning && setActiveTimer("Session");
 
@@ -189,26 +179,6 @@ const PomodoroAssembly = () => {
     }
   };
 
-  // keyboard inputs
-  const setBreakTimerKeyboard = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-
-    !isRunning && setActiveTimer("Break");
-
-    !isRunning && setBreakTime(parseInt(inputValue));
-    !isRunning && setMinutes(parseInt(inputValue));
-    !isRunning && setSeconds(0);
-  };
-
-  const setSessionTimerKeyboard = (e: React.ChangeEvent<HTMLInputElement>) => {
-    !isRunning && setInputValue(e.target.value);
-
-    !isRunning && setActiveTimer("Session");
-
-    !isRunning && setSessionTime(inputValue);
-    !isRunning && setMinutes(sessionTime);
-    !isRunning && setSeconds(0);
-  };
   return (
     <>
       <div
@@ -241,7 +211,6 @@ const PomodoroAssembly = () => {
             onClickIncrement={setBreakTimer}
             order={`order-first`}
             opacity={options ? "opacity-100" : "opacity-0"}
-            onChange={setBreakTimerKeyboard}
           />
           {/* set session timer */}
 
@@ -252,7 +221,6 @@ const PomodoroAssembly = () => {
             onClickIncrement={setSessionTimer}
             order={`order-last`}
             opacity={options ? "opacity-100" : "opacity-0"}
-            onChange={setSessionTimerKeyboard}
           />
         </>
       </div>
