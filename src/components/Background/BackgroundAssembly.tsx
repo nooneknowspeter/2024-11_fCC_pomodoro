@@ -3,9 +3,10 @@ import { useRef } from "react";
 
 import vertexShader from "/src/shaders/vertexShader.glsl";
 import fragmentShader from "/src/shaders/fragmentShader.glsl";
+import { ShaderMaterial } from "three";
 
 const Geo = (props: { height: number; width: number }) => {
-  const shaderRef = useRef();
+  const shaderRef = useRef<ShaderMaterial>(new ShaderMaterial());
 
   useFrame(({ clock }) => {
     if (shaderRef.current) {
