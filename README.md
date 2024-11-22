@@ -10,7 +10,7 @@
 - [Git](https://git-scm.com/)
 - [GitHub](https://github.com/)
 - [GLSL](https://thebookofshaders.com/)
-- [GLSL Plugin Vite](https://www.npmjs.com/package/vite-plugin-glsl)
+- [GLSL Plugin Vite](https://github.com/UstymUkhman/vite-plugin-glsl)
 - [GSAP](https://gsap.com/docs/v3/)
 - [Netlify](https://www.netlify.com/)
 - [Nodejs](https://nodejs.org/en/)
