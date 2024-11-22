@@ -5,19 +5,25 @@ import vertexShader from "/src/shaders/vertexShader.glsl";
 import fragmentShader from "/src/shaders/fragmentShader.glsl";
 import { ShaderMaterial } from "three";
 
+import * as THREE from "three";
+
 const Geo = (props: { height: number; width: number }) => {
   const shaderRef = useRef<ShaderMaterial>(null);
 
   useFrame(({ clock }) => {
     if (shaderRef.current) {
       shaderRef.current.uniforms.uTime.value = clock.getElapsedTime();
+      shaderRef.current.uniforms.uResolution.value.set(
+        window.innerWidth,
+        window.innerHeight,
+      );
     }
   });
 
   return (
     <>
       <mesh>
-        <planeGeometry args={[props.height, props.width]} />
+        <planeGeometry args={[props.width, props.height]} />
         {/* <meshPhongMaterial color={"white"} /> */}
 
         <shaderMaterial
@@ -26,6 +32,9 @@ const Geo = (props: { height: number; width: number }) => {
           fragmentShader={fragmentShader}
           uniforms={{
             uTime: { value: 0.0 },
+            uResolution: {
+              value: new THREE.Vector2(window.innerWidth, window.innerHeight),
+            },
           }}
         />
       </mesh>
@@ -36,8 +45,11 @@ const Geo = (props: { height: number; width: number }) => {
 const Scene = () => {
   return (
     <>
-      <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
-        <Geo height={window.innerHeight} width={window.innerWidth} />
+      <Canvas>
+        <Geo
+          height={window.innerHeight / 100}
+          width={window.innerWidth / 100}
+        />
       </Canvas>
     </>
   );
