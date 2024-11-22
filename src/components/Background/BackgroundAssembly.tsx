@@ -6,7 +6,7 @@ import fragmentShader from "/src/shaders/fragmentShader.glsl";
 import { ShaderMaterial } from "three";
 
 const Geo = (props: { height: number; width: number }) => {
-  const shaderRef = useRef<ShaderMaterial>(new ShaderMaterial());
+  const shaderRef = useRef<ShaderMaterial>(null);
 
   useFrame(({ clock }) => {
     if (shaderRef.current) {
@@ -33,20 +33,11 @@ const Geo = (props: { height: number; width: number }) => {
   );
 };
 
-const Lights = () => {
-  return (
-    <>
-      <ambientLight intensity={0.1} color="white" />
-    </>
-  );
-};
-
 const Scene = () => {
   return (
     <>
-      <Canvas>
+      <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
         <Geo height={window.innerHeight} width={window.innerWidth} />
-        <Lights />
       </Canvas>
     </>
   );
@@ -54,10 +45,7 @@ const Scene = () => {
 
 const BackgroundAssembly = () => {
   return (
-    <div
-      id="background"
-      className="absolute left-0 top-0 h-screen w-screen bg-neutral-950"
-    >
+    <div id="background" className="absolute left-0 top-0 h-screen w-screen">
       <Scene />
     </div>
   );
